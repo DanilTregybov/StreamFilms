@@ -5,18 +5,19 @@ from django.contrib.gis import forms
 from .models import Category, Genre, Film, Films_Shots, Actor_Director, Rating, Rating_Star, Reviews
 
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
-
+from modeltranslation.admin import TranslationAdmin
 
 
 class FilmAdminForm(forms.ModelForm):
-    description = forms.CharField(label="Опис", widget=CKEditorUploadingWidget())
+    description_uk = forms.CharField(label="Опис", widget=CKEditorUploadingWidget())
+    description_en = forms.CharField(label="Опис", widget=CKEditorUploadingWidget())
 
     class Meta:
         model = Film
         fields = '__all__'
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(TranslationAdmin):
     list_display = ("id", "name", "url",)
     list_display_links = ("name",)
 
@@ -39,7 +40,7 @@ class MovieShotsInline(admin.TabularInline):
     get_image.short_description = "Зображення"
 
 @admin.register(Film)
-class FilmAdmin(admin.ModelAdmin):
+class FilmAdmin(TranslationAdmin):
     list_display = ("title", "category", "url", "draft",)
     list_filter = ("category", "year")
     search_fields = ("title", "category__name",)
@@ -107,12 +108,12 @@ class ReviewsAdmin(admin.ModelAdmin):
 
 
 @admin.register(Genre)
-class GenreAdmin(admin.ModelAdmin):
+class GenreAdmin(TranslationAdmin):
     list_display = ("name", "url")
 
 
 @admin.register(Actor_Director)
-class Actor_DirectorAdmin(admin.ModelAdmin):
+class Actor_DirectorAdmin(TranslationAdmin):
     list_display = ("name", "age", "get_image")
     readonly_fields = ("get_image",)
 
@@ -128,7 +129,7 @@ class RatingAdmin(admin.ModelAdmin):
 
 
 @admin.register(Films_Shots)
-class Films_ShotsAdmin(admin.ModelAdmin):
+class Films_ShotsAdmin(TranslationAdmin):
     list_display = ("title", "film", "get_image")
     readonly_fields = ("get_image",)
 
